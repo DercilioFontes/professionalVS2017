@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections;
+using System.Diagnostics;
+using System.Messaging;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace GettingStarted
 {
@@ -20,6 +11,24 @@ namespace GettingStarted
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        public class MyCollection : IEnumerable, IMyCollection
+        {
+            public IEnumerator GetEnumerator() => throw new NotImplementedException();
+        }
+
+        readonly Customer c = new Customer
+        {
+            FirstName = "Joe",
+            LastName = "Smith"
+        };
+
+        internal Customer C => c;
+
+        public EventLog eventLog = new EventLog();
+
+        public MessageQueue messageQueue = new MessageQueue();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -27,6 +36,15 @@ namespace GettingStarted
 
         private void buttonSayHello_Click(object sender, RoutedEventArgs e)
         {
+            MessagesRow();
+            this.eventLog.Source = "My server Explorer App";
+            this.eventLog.WriteEntry("Something happened", EventLogEntryType.Information);
+        }
+
+        private void MessagesRow() 
+        {
+            MessageBox.Show("Hello " + textBoxSayHello.Text + "!");
+            MessageBox.Show("Hello " + textBoxSayHello.Text + "!");
             MessageBox.Show("Hello " + textBoxSayHello.Text + "!");
         }
     }
